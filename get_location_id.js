@@ -2,6 +2,8 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const csv = require('csv-parser');
 const { Parser } = require('json2csv');
+const { PassThrough } = require('stream');
+const { start } = require('repl');
 
 let percentage = 0;
 let scrapeStartDate = "";
@@ -10,7 +12,7 @@ function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function scrapFunction(givenDate) {
+async function getLoactionID(givenDate) {
     const nowDate = new Date();
 
     let keyCount = 0;
@@ -205,6 +207,7 @@ async function scrapFunction(givenDate) {
                                 }
                                 if (titleArray.length > 0) {
                                     
+                                    
                                     const sits = await page.$x('//*[@id="rent-offer-list-container"]/div/div[4]/div/div/div/a/div/div[1]/div[2]/div[1]');
                                     for (const sit of sits) {
                                         const text = await page.evaluate(el => el.textContent, sit);
@@ -246,7 +249,7 @@ async function scrapFunction(givenDate) {
                                                 console.log("can't find card button !")
                                             }
                                         }, card_button);
-                                        await delay(5000);
+                                        await delay(3000);
     
                                         try {
                                             const modal_button = '//*[@id="dialogDesc"]/form/div/div[4]/button[2]';
@@ -272,7 +275,7 @@ async function scrapFunction(givenDate) {
                                                 console.log("can't find peace button !")
                                             }
                                         }, peace_button);
-                                        await delay(5000);
+                                        await delay(2000);
     
                                         const submit_peace_button = '//*[@id="rent-checkout-container"]/div/div[1]/div/div[2]/div/div[2]/button';
                                         await page.evaluate((submit_peace_button) => {
@@ -283,7 +286,7 @@ async function scrapFunction(givenDate) {
                                                 console.log("can't find submit peace button !")
                                             }
                                         }, submit_peace_button);
-                                        await delay(3000)
+                                        await delay(2000)
     
                                         try {
                                             const tollpass_path = '//*[@id="rent-checkout-container"]/div/div[2]/div/div[1]/div/form/div[5]/div/div/div[2]';
@@ -443,7 +446,8 @@ function percentFunction() {
     return { percentage, scrapeStartDate }
 }
 
-module.exports = {
-    scrapFunction,
-    percentFunction,
-}
+// module.exports = {
+//     getLoactionID,
+//     percentFunction,
+// }
+getLoactionID("2024-04");
